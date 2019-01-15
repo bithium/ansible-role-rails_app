@@ -1,0 +1,23 @@
+---
+- name: Prepare
+  hosts: all
+
+  vars_files:
+    - rails_app.yml
+
+  tasks:
+    - name: Setup image for keeping downloaded packages
+      file:
+        path: /etc/apt/apt.conf.d/docker-clean
+        state: absent
+      when: ansible_os_family == 'Debian'
+
+    - name: Install dependencies
+      package: name=git
+
+    - name: Download rails application code
+      git:
+        repo: https://github.com/bithium/rails_app_todo.git
+        dest: "{{rails_app_path}}"
+        force: true
+        depth: 1

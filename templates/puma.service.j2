@@ -1,0 +1,14 @@
+[Unit]
+Description={{rails_app_name | title}} Application Server
+Before=lighttpd.service
+After=network.target
+
+[Service]
+Type=simple
+User={{rails_app_user}}
+WorkingDirectory={{rails_app_path}}
+ExecStart={{rubygems_path}}/bin/puma -C "{{rails_app_config_path_puma}}"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

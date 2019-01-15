@@ -1,0 +1,103 @@
+---
+# tasks file for rails_app
+
+- name: Install required packages
+  package:
+    name: "{{rails_app_packages | union(rails_app_packages_extra)}}"
+
+- name: Create rails app system user
+  user:
+    name: "{{rails_app_user}}"
+    home: "{{rails_app_path}}"
+    comment: Account used by {{rails_app_name}} puma server
+
+- name: Fix permissions for application folder
+  file:
+    path: "{{rails_app_path}}"
+    owner: "{{rails_app_user}}"
+    group: "{{rails_app_user}}"
+    recurse: true
+
+- name: Create application databases
+  postgresql_db: name={{rails_app_db.database}}
+  become: true
+  become_user: postgres
+
+- name: Create application database user
+  postgresql_user:
+    db: "{{rails_app_db.database}}"
+    name: "{{rails_app_db.username}}"
+    password: "{{rails_app_db.password}}"
+    priv: "ALL"
+  become: true
+  become_user: postgres
+
+- name: Read rubygems path for application user
+  command: ruby -r rubygems -e 'puts Gem.user_dir'
+  args:
+    warn: false
+  register: rubygems_path_output
+  become: true
+  become_user: "{{rails_app_user}}"
+  check_mode: false
+  changed_when: false
+  tags: always
+
+- name: Set fact for rubygems path
+  set_fact:
+    rubygems_path: "{{rubygems_path_output.stdout | trim}}"
+  tags: always
+
+- name: Install rake gem
+  gem:
+    name: "rake"
+    version: "{{rails_app_rake | default(omit)}}"
+    state: present
+  become: true
+  become_user: "{{rails_app_user}}"
+
+- name: Install bundler gem
+  gem:
+    name: "bundler"
+    version: "{{rails_app_bundler | default(omit)}}"
+    state: present
+  become: true
+  become_user: "{{rails_app_user}}"
+
+- name: Install puma gem
+  gem:
+    name: "puma"
+    version: "{{rails_app_puma | default(omit)}}"
+    state: present
+  environment:
+    DISABLE_SSL: 1
+  become: true
+  become_user: "{{rails_app_user}}"
+
+- name: Create puma configuration file
+  template:
+    src: puma.rb.j2
+    dest: "{{rails_app_config_path_puma}}"
+  become: true
+  become_user: "{{rails_app_user}}"
+
+- name: Create puma systemd service file for application
+  template:
+    src: puma.service.j2
+    dest: "/etc/systemd/system/{{rails_app_name}}.service"
+
+- name: Create lighttpd configuration file
+  template:
+    src: lighttpd.conf.j2
+    dest: "{{rails_app_config_path_lighttpd}}"
+
+- name: Enable application service
+  systemd:
+    name: "{{rails_app_name}}.service"
+    enabled: true
+    daemon_reload: true
+
+- name: Create database configuration file
+  copy:
+    dest: "{{rails_app_config_path_db}}"
+    content: "{{rails_app_db_config | to_nice_yaml}}"

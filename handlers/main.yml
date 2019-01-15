@@ -1,0 +1,8 @@
+---
+# handlers file for rails_app
+
+- name: restart rails_app
+  service:
+    name: "{{rails_app_name}}"
+    state: restarted
+  notify: restart lighttpd

@@ -1,0 +1,33 @@
+---
+# defaults file for rails_app
+
+rails_app_packages:
+  - gcc
+  - libpq-dev
+  - make
+  - python-psycopg2
+  - ruby
+  - ruby-dev
+  - zlib1g-dev
+
+rails_app_packages_extra: []
+
+rails_app_user: "{{rails_app_name}}"
+rails_app_path: "/var/www/{{rails_app_name}}"
+
+rails_app_config_path: "{{rails_app_path}}/config"
+rails_app_config_path_puma: "{{rails_app_config_path}}/puma.rb"
+rails_app_config_path_db: "{{rails_app_config_path}}/database.yml"
+
+rails_app_config_path_lighttpd: "{{lighttpd_config_enabled_dir}}/99-{{rails_app_name}}.conf"
+
+rails_app_log_path: "{{rails_app_path}}/log"
+
+rails_app_db_config:
+  production: "{{rails_app_db | mandatory}}"
+
+# rails_app_bundler: '>= 0'
+# rails_app_puma: '>= 0'
+
+rails_app_puma_workers: 2
+rails_app_puma_threads: 16

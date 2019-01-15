@@ -1,0 +1,21 @@
+environment 'production'
+
+workers {{rails_app_puma_workers}}
+threads 1, {{rails_app_puma_threads}}
+
+{% for w in range(rails_app_puma_workers) %}
+  {% for t in range(rails_app_puma_threads) %}
+bind 'unix:///tmp/puma_{{rails_app_name}}_{{w}}.{{t}}.socket'
+  {% endfor %}
+{% endfor %}
+
+stdout_redirect "{{rails_app_log_path}}/production.log",
+                "{{rails_app_log_path}}/production.log", true
+
+preload_app!
+
+on_worker_boot do
+  ActiveSupport.on_load(:active_record) do
+    ActiveRecord::Base.establish_connection
+  end
+end

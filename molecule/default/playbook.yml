@@ -1,0 +1,59 @@
+---
+- name: Converge
+  hosts: all
+
+  vars_files:
+    - rails_app.yml
+    - goss.yml
+
+  roles:
+    - role: rails_app
+
+  environment:
+    RAILS_ENV: "production"
+
+  tasks:
+    - name: Add support for connecting to database
+      lineinfile:
+        path: "{{rails_app_path}}/Gemfile.local"
+        line: "gem 'pg'"
+        create: true
+
+    - name: Install required gems
+      command: bundle install --without development test --path={{rubygems_path}}
+      args:
+        chdir: "{{rails_app_path}}"
+        creates: "{{rails_app_path}}/Gemfile.lock"
+      environment:
+        PATH: "{{rubygems_path}}/bin:{{ ansible_env.PATH }}"
+      become: true
+      become_user: "{{rails_app_user}}"
+
+    - name: Run database migrations
+      command: rake db:migrate
+      args:
+        chdir: "{{rails_app_path}}"
+      environment:
+        PATH: "{{rubygems_path}}/bin:{{ ansible_env.PATH }}"
+      become: true
+      become_user: "{{rails_app_user}}"
+      changed_when: false
+
+    - name: Create tasks for testing
+      command: rake db:seed
+      args:
+        chdir: "{{rails_app_path}}"
+      environment:
+        PATH: "{{rubygems_path}}/bin:{{ ansible_env.PATH }}"
+      become: true
+      become_user: "{{rails_app_user}}"
+      changed_when: false
+
+    - name: Enable application service
+      service:
+        name: "{{rails_app_name}}"
+        state: started
+      notify: restart lighttpd
+
+    - name: Dump host variables for role
+      template: src=config.yml.j2 dest={{goss_test_variables}}

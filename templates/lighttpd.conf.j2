@@ -1,0 +1,16 @@
+
+{% if lighttpd_modules is undefined or "proxy" not in lighttpd_modules %}
+server.modules += (
+  "mod_proxy"
+)
+{% endif %}
+
+$HTTP["host"] =~ "^{{rails_app_fqdn | mandatory | regex_escape() }}$" {
+    proxy.server = ( "" => ( "{{rails_app_name}}" =>
+{% for w in range(rails_app_puma_workers) %}
+  {% for t in range(rails_app_puma_threads) %}
+       ("host" => "/tmp/puma_{{rails_app_name}}_{{w}}.{{t}}.socket"),
+  {% endfor %}
+{% endfor %}
+   ))
+}
