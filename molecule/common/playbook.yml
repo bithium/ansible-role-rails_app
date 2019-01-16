@@ -6,6 +6,13 @@
     - rails_app.yml
     - goss.yml
 
+  vars:
+    db_to_gem:
+      postgresql: >-
+        'pg', '>= 0.18', '< 2.0'
+      mysql2: >-
+        'mysql2', '>= 0.4.4', '< 0.6.0'
+
   roles:
     - role: rails_app
 
@@ -14,10 +21,9 @@
 
   tasks:
     - name: Add support for connecting to database
-      lineinfile:
-        path: "{{rails_app_path}}/Gemfile.local"
-        line: "gem 'pg'"
-        create: true
+      copy:
+        dest: "{{rails_app_path}}/Gemfile.local"
+        content: "gem {{db_to_gem[rails_app_db.adapter] | mandatory}}"
 
     - name: Install required gems
       command: bundle install --without development test --path={{rubygems_path}}

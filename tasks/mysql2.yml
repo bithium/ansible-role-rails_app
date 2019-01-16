@@ -1,0 +1,33 @@
+---
+# mysql tasks file for rails_app
+
+- name: Install database package dependencies
+  package:
+    name: "{{item}}"
+  loop:
+    - libmysqlclient-dev
+    - python-pymysql
+
+- name: Set MariaDB socket path fact
+  block:
+    - name: Read configuration value
+      command: mysql_config --socket
+      register: mysql_config_results
+      check_mode: false
+      changed_when: false
+
+    - name: Set configuration value fact
+      set_fact:
+        mysql_socket_path: "{{mysql_config_results.stdout | trim}}"
+
+- name: Create application database
+  mysql_db:
+    name: "{{rails_app_db.database}}"
+    login_unix_socket: "{{mysql_socket_path}}"
+
+- name: Create application database user
+  mysql_user:
+    name: "{{rails_app_db.username}}"
+    password: "{{rails_app_db.password}}"
+    priv: "{{rails_app_db.database}}.*:ALL"
+    login_unix_socket: "{{mysql_socket_path}}"

@@ -3,10 +3,11 @@ rails_app_name: "todo"
 rails_app_user: "sandbox"
 
 rails_app_db:
-  adapter: postgresql
+  adapter: "{{lookup('env', 'RAILS_APP_DB')}}"
   database: "{{rails_app_name}}"
   username: "{{rails_app_user}}"
-  password: "{{ lookup('password', '/tmp/rails_app_password chars=ascii_letters,digits,hexdigits') }}"
+  password: >-
+    {{ lookup('password', '/tmp/rails_app_password chars=ascii_letters,digits,hexdigits') }}
 
 rails_app_fqdn: "todo.example.com"
 

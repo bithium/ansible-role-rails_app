@@ -1,0 +1,48 @@
+# Molecule managed
+
+---
+
+package:
+{{range .Vars.rails_app.packages}}
+  {{.}}:
+    installed: true
+{{end}}
+
+user:
+  {{.Vars.rails_app.user}}:
+    exists: true
+    home: {{.Vars.rails_app.path}}
+
+service:
+  {{.Vars.rails_app.name}}:
+    enabled: true
+    running: true
+
+file:
+  {{.Vars.rails_app.lighttpd}}:
+    exists: true
+
+  /etc/hosts:
+    exists: true
+    owner: root
+    group: root
+    contains:
+      - {{.Vars.rails_app.fqdn}}
+
+http:
+  http://{{.Vars.rails_app.fqdn}}:
+    status: 404
+
+  http://{{.Vars.rails_app.fqdn}}/tasks:
+    status: 200
+    body:
+      - Task 0
+      - Task 1
+      - Task 2
+      - Task 3
+      - Task 4
+      - Task 5
+      - Task 6
+      - Task 7
+      - Task 8
+      - Task 9

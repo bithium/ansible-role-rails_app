@@ -6,9 +6,13 @@ This ansible role is used to setup a machine to run a rails application.
 Requirements
 ------------
 
-No special requirements;
+This role assumes that the database that the application will connect to is already installed and configured.
 
-Note, however that this role requires root access, so either run it in a playbook with a
+This role will then try to create the database and user that will be used by the application.
+
+It will use the information in `rails_app_db`
+
+This role requires root access, so either run it in a playbook with a
 global `become: yes`, or invoke the role in your playbook like:
 
 - hosts: todo_app
@@ -31,6 +35,7 @@ Available variables are listed below, along with default values (see `defaults/m
      - python-psycopg2
      - ruby
      - ruby-dev
+     - tzdata
      - zlib1g-dev
    ```
 
@@ -72,7 +77,7 @@ Available variables are listed below, along with default values (see `defaults/m
 Dependencies
 ------------
 
-This role depends on Bithium's lighttpd and postgresql roles.
+This role depends on Bithium's lighttpd role.
 
 Example Playbook
 ----------------

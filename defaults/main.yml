@@ -3,11 +3,10 @@
 
 rails_app_packages:
   - gcc
-  - libpq-dev
   - make
-  - python-psycopg2
   - ruby
   - ruby-dev
+  - tzdata
   - zlib1g-dev
 
 rails_app_packages_extra: []

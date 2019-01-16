@@ -18,19 +18,7 @@
     group: "{{rails_app_user}}"
     recurse: true
 
-- name: Create application databases
-  postgresql_db: name={{rails_app_db.database}}
-  become: true
-  become_user: postgres
-
-- name: Create application database user
-  postgresql_user:
-    db: "{{rails_app_db.database}}"
-    name: "{{rails_app_db.username}}"
-    password: "{{rails_app_db.password}}"
-    priv: "ALL"
-  become: true
-  become_user: postgres
+- import_tasks: "{{rails_app_db.adapter}}.yml"
 
 - name: Read rubygems path for application user
   command: ruby -r rubygems -e 'puts Gem.user_dir'

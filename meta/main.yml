@@ -15,8 +15,7 @@ galaxy_info:
         - 18.04
 
   galaxy_tags:
-    - rails ruby postgresql
+    - rails ruby postgresql mysql
 
 dependencies:
-  - postgresql
   - lighttpd
