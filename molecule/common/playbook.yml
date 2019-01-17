@@ -24,6 +24,8 @@
       copy:
         dest: "{{rails_app_path}}/Gemfile.local"
         content: "gem {{db_to_gem[rails_app_db.adapter] | mandatory}}"
+      become: true
+      become_user: "{{rails_app_user}}"
 
     - name: Install required gems
       command: bundle install --without development test --path={{rubygems_path}}

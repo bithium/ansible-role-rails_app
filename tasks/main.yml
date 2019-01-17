@@ -89,3 +89,5 @@
   copy:
     dest: "{{rails_app_config_path_db}}"
     content: "{{rails_app_db_config | to_nice_yaml}}"
+  become: true
+  become_user: "{{rails_app_user}}"
