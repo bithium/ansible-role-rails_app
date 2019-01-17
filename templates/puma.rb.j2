@@ -3,11 +3,7 @@ environment 'production'
 workers {{rails_app_puma_workers}}
 threads 1, {{rails_app_puma_threads}}
 
-{% for w in range(rails_app_puma_workers) %}
-  {% for t in range(rails_app_puma_threads) %}
-bind 'unix:///tmp/puma_{{rails_app_name}}_{{w}}.{{t}}.socket'
-  {% endfor %}
-{% endfor %}
+bind 'unix:///tmp/puma_{{rails_app_name}}.socket'
 
 stdout_redirect "{{rails_app_log_path}}/production.log",
                 "{{rails_app_log_path}}/production.log", true
