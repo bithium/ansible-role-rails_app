@@ -3,6 +3,8 @@
 
 rails_app_packages:
   - gcc
+  - lighttpd-mod-magnet
+  - lua5.3
   - make
   - ruby
   - ruby-dev

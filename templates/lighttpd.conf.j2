@@ -1,11 +1,9 @@
 
-{% if lighttpd_modules is undefined or "proxy" not in lighttpd_modules %}
-server.modules += (
-  "mod_proxy"
-)
-{% endif %}
+$HTTP["host"] == "{{rails_app_fqdn | mandatory}}" {
+    server.document-root = "{{rails_app_path}}/public"
 
-$HTTP["host"] =~ "^{{rails_app_fqdn | mandatory | regex_escape() }}$" {
+    magnet.attract-physical-path-to = ( "/etc/lighttpd/rails.lua" )
+
     proxy.server = ( "" => ( "{{rails_app_name}}" =>
        ("host" => "/tmp/puma_{{rails_app_name}}.socket"),
     ))

@@ -33,6 +33,9 @@ http:
   http://{{.Vars.rails_app.fqdn}}:
     status: 404
 
+  http://{{.Vars.rails_app.fqdn}}/robots.txt:
+    status: 200
+
   http://{{.Vars.rails_app.fqdn}}/tasks:
     status: 200
     body:
