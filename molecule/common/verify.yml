@@ -60,12 +60,6 @@
         state: absent
       with_items: "{{ molecule_tests }}"
 
-    - name: Tweak hosts file for application testing
-      lineinfile:
-        path: "/etc/hosts"
-        line: "127.0.0.1  {{rails_app_fqdn}}"
-        unsafe_writes: true
-
     - name: Execute Goss tests
       shell: >
         {{ goss_dst }} --vars {{goss_test_variables}}             \

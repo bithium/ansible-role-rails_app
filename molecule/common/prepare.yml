@@ -33,3 +33,9 @@
         dest: "{{rails_app_path}}"
         force: true
         depth: 1
+
+    - name: Tweak hosts file for application testing
+      lineinfile:
+        path: "/etc/hosts"
+        line: "127.0.0.1  {{rails_app_fqdn}}"
+        unsafe_writes: true
