@@ -23,5 +23,6 @@ end
 -- print("Path: " .. lighty.env["physical.path"])
 
 if (file_exists(lighty.env["physical.path"])) then
+  lighty.content = {{ filename = lighty.env["physical.path"]}}
   return 200
 end

@@ -35,6 +35,8 @@ http:
 
   http://{{.Vars.rails_app.fqdn}}/robots.txt:
     status: 200
+    body:
+      - documentation on how to use
 
   http://{{.Vars.rails_app.fqdn}}/tasks:
     status: 200
