@@ -8,7 +8,7 @@
 - name: Create rails app system user
   user:
     name: "{{rails_app_user}}"
-    home: "{{rails_app_path}}"
+    home: "{{rails_app_user_home}}"
     comment: Account used by {{rails_app_name}} puma server
 
 - name: Fix permissions for application folder

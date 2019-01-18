@@ -16,6 +16,8 @@ rails_app_packages_extra: []
 rails_app_user: "{{rails_app_name}}"
 rails_app_path: "/var/www/{{rails_app_name}}"
 
+rails_app_user_home: "{{rails_app_path}}"
+
 rails_app_config_path: "{{rails_app_path}}/config"
 rails_app_config_path_puma: "{{rails_app_config_path}}/puma.rb"
 rails_app_config_path_db: "{{rails_app_config_path}}/database.yml"
