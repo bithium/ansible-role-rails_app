@@ -57,11 +57,6 @@
       become_user: "{{rails_app_user}}"
       changed_when: false
 
-    - name: Enable application service
-      service:
-        name: "{{rails_app_name}}"
-        state: started
-      notify: restart lighttpd
-
     - name: Dump host variables for role
       template: src=config.yml.j2 dest={{goss_test_variables}}
+      notify: restart rails_app

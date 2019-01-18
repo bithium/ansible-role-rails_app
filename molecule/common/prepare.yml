@@ -34,6 +34,12 @@
         force: true
         depth: 1
 
+    - name: Fix checkout folder permission's
+      file:
+        path: "{{rails_app_path}}"
+        mode: "o+w"
+        recurse: true
+
     - name: Tweak hosts file for application testing
       lineinfile:
         path: "/etc/hosts"

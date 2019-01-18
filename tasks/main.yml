@@ -4,21 +4,17 @@
 - name: Install required packages
   package:
     name: "{{rails_app_packages | union(rails_app_packages_extra)}}"
+  become: true
 
 - name: Create rails app system user
   user:
     name: "{{rails_app_user}}"
     home: "{{rails_app_user_home}}"
     comment: Account used by {{rails_app_name}} puma server
-
-- name: Fix permissions for application folder
-  file:
-    path: "{{rails_app_path}}"
-    owner: "{{rails_app_user}}"
-    group: "{{rails_app_user}}"
-    recurse: true
+  become: true
 
 - import_tasks: "{{rails_app_db_adapter}}.yml"
+  become: true
 
 - name: Read rubygems path for application user
   command: ruby -r rubygems -e 'puts Gem.user_dir'
@@ -62,12 +58,27 @@
   become: true
   become_user: "{{rails_app_user}}"
 
+- name: Copy helper lua script.
+  copy:
+    src: ../files/rails.lua
+    dest: /etc/lighttpd/rails.lua
+    owner: "{{lighttpd_user}}"
+    group: "{{lighttpd_group}}"
+  become: true
+
 - name: Ensure configuration path exists
   file:
     path: "{{rails_app_config_path}}"
     state: directory
     owner: "{{rails_app_user}}"
     group: "{{rails_app_user}}"
+
+- name: Create database configuration file
+  copy:
+    dest: "{{rails_app_config_path_db}}"
+    content: "{{rails_app_db_config | to_nice_yaml}}"
+  become: true
+  become_user: "{{rails_app_user}}"
 
 - name: Create puma configuration file
   template:
@@ -80,18 +91,13 @@
   template:
     src: puma.service.j2
     dest: "/etc/systemd/system/{{rails_app_name}}.service"
-
-- name: Copy helper lua script.
-  copy:
-    src: ../files/rails.lua
-    dest: /etc/lighttpd/rails.lua
-    owner: "{{lighttpd_user}}"
-    group: "{{lighttpd_group}}"
+  become: true
 
 - name: Create lighttpd configuration file
   template:
     src: lighttpd.conf.j2
     dest: "{{rails_app_config_path_lighttpd}}"
+  become: true
   notify: restart lighttpd
 
 - name: Enable application service
@@ -99,10 +105,4 @@
     name: "{{rails_app_name}}.service"
     enabled: true
     daemon_reload: true
-
-- name: Create database configuration file
-  copy:
-    dest: "{{rails_app_config_path_db}}"
-    content: "{{rails_app_db_config | to_nice_yaml}}"
   become: true
-  become_user: "{{rails_app_user}}"
