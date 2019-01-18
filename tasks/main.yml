@@ -18,7 +18,7 @@
     group: "{{rails_app_user}}"
     recurse: true
 
-- import_tasks: "{{rails_app_db.adapter}}.yml"
+- import_tasks: "{{rails_app_db_adapter}}.yml"
 
 - name: Read rubygems path for application user
   command: ruby -r rubygems -e 'puts Gem.user_dir'

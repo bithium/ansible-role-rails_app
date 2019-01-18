@@ -26,8 +26,12 @@ rails_app_config_path_lighttpd: "{{lighttpd_config_enabled_dir}}/99-{{rails_app_
 
 rails_app_log_path: "{{rails_app_path}}/log"
 
+# rails_app_db_adapter:
+
 rails_app_db_config:
-  production: "{{rails_app_db | mandatory}}"
+  production: |
+    {% set _dummy = rails_app_db.update({'adapter':rails_app_db_adapter}) %}
+    {{rails_app_db}}
 
 # rails_app_bundler: '>= 0'
 # rails_app_puma: '>= 0'

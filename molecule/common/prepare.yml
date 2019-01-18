@@ -20,7 +20,7 @@
       when: ansible_os_family == 'Debian'
 
   roles:
-    - "{{adapter_role[rails_app_db.adapter] | default(rails_app_db.adapter)}}"
+    - "{{adapter_role[rails_app_db_adapter] | default(rails_app_db_adapter)}}"
 
   tasks:
 

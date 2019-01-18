@@ -58,6 +58,8 @@ Available variables are listed below, along with default values (see `defaults/m
    NOTE: This variable requires the same fields as rails database configuration, expect that they should not be
    scoped by the environment.
 
+   NOTE: The adapter field **MUST** be specified in the `rails_app_db_adapter`.
+
  * Lighttpd application configuration file path:
 
    ```yaml
@@ -73,6 +75,12 @@ Available variables are listed below, along with default values (see `defaults/m
  * Number of workers to start puma with: `rails_app_puma_workers: 2`
 
  * Number of threads per worker to use: `rails_app_puma_threads: 16`
+
+ * Rails database adapter to use: `rails_app_db_adapter`
+
+   The supported values are:
+   - postgresql
+   - mysql2
 
 Dependencies
 ------------

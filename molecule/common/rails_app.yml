@@ -2,8 +2,9 @@
 rails_app_name: "todo"
 rails_app_user: "sandbox"
 
+rails_app_db_adapter: "{{lookup('env', 'RAILS_APP_DB')}}"
+
 rails_app_db:
-  adapter: "{{lookup('env', 'RAILS_APP_DB')}}"
   database: "{{rails_app_name}}"
   username: "{{rails_app_user}}"
   password: >-
