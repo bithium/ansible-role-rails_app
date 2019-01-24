@@ -4,4 +4,4 @@
 - name: Copy helper macro configuration file.
   copy:
     src: files/rails.conf
-    dest: "{{apache2_modules_enabled_path}}/rails_app_macro.conf"
+    dest: "{{apache2_config_enabled_path}}/rails_app_macro.conf"
