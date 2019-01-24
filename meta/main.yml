@@ -15,10 +15,7 @@ galaxy_info:
         - 18.04
 
   galaxy_tags:
-    - rails ruby postgresql mysql
+    - rails ruby postgresql mysql lighttpd apache2
 
 dependencies:
-  - role: lighttpd
-    lighttpd_modules:
-      - proxy
-      - magnet
+  - "{{rails_app_proxy | default('lighttpd')}}"

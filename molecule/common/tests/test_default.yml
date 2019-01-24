@@ -19,7 +19,7 @@ service:
     running: true
 
 file:
-  {{.Vars.rails_app.lighttpd}}:
+  {{.Vars.rails_app.proxy}}:
     exists: true
 
   /etc/hosts:

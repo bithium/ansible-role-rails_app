@@ -58,14 +58,6 @@
   become: true
   become_user: "{{rails_app_user}}"
 
-- name: Copy helper lua script.
-  copy:
-    src: ../files/rails.lua
-    dest: /etc/lighttpd/rails.lua
-    owner: "{{lighttpd_user}}"
-    group: "{{lighttpd_group}}"
-  become: true
-
 - name: Ensure configuration path exists
   file:
     path: "{{rails_app_config_path}}"
@@ -86,6 +78,7 @@
     dest: "{{rails_app_config_path_puma}}"
   become: true
   become_user: "{{rails_app_user}}"
+  notify: restart rails_app
 
 - name: Create puma systemd service file for application
   template:
@@ -93,12 +86,14 @@
     dest: "/etc/systemd/system/{{rails_app_name}}.service"
   become: true
 
-- name: Create lighttpd configuration file
-  template:
-    src: lighttpd.conf.j2
-    dest: "{{rails_app_config_path_lighttpd}}"
+- import_tasks: "{{rails_app_proxy}}.yml"
   become: true
-  notify: restart lighttpd
+
+- name: Create proxy configuration file
+  template:
+    src: "{{rails_app_proxy}}.conf.j2"
+    dest: "{{rails_app_proxy_config_path}}"
+  notify: restart {{rails_app_proxy}}
 
 - name: Enable application service
   systemd:

@@ -3,8 +3,6 @@
 
 rails_app_packages:
   - gcc
-  - lighttpd-mod-magnet
-  - lua5.3
   - make
   - ruby
   - ruby-dev
@@ -22,7 +20,9 @@ rails_app_config_path: "{{rails_app_path}}/config"
 rails_app_config_path_puma: "{{rails_app_config_path}}/puma.rb"
 rails_app_config_path_db: "{{rails_app_config_path}}/database.yml"
 
-rails_app_config_path_lighttpd: "{{lighttpd_config_enabled_dir}}/99-{{rails_app_name}}.conf"
+rails_app_proxy_config_paths:
+  lighttpd: "{{lighttpd_config_enabled_dir | default(omit)}}"
+  apache2: "{{apache2_sites_enabled_path | default(omit)}}"
 
 rails_app_log_path: "{{rails_app_path}}/log"
 

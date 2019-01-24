@@ -1,0 +1,7 @@
+---
+# Apache2 tasks for rails_app
+
+- name: Copy helper macro configuration file.
+  copy:
+    src: files/rails.conf
+    dest: "{{apache2_modules_enabled_path}}/rails_app_macro.conf"

@@ -26,11 +26,11 @@ provisioner:
     verify: ../common/verify.yml
   env:
     RAILS_APP_DB: postgresql
-    RAILS_APP_PROXY: lighttpd
+    RAILS_APP_PROXY: apache2
   lint:
     name: ansible-lint
 scenario:
-  name: default
+  name: apache2
 verifier:
   name: goss
   lint:

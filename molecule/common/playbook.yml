@@ -13,6 +13,8 @@
       mysql2: >-
         'mysql2', '>= 0.4.4', '< 0.6.0'
 
+    rails_app_proxy: "{{lookup('env', 'RAILS_APP_PROXY')}}"
+
   roles:
     - role: rails_app
 

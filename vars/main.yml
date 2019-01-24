@@ -1,2 +1,26 @@
 ---
 # vars file for rails_app
+
+rails_app_proxy_config_path: >-
+  {{rails_app_proxy_config_paths[rails_app_proxy]}}/99-{{rails_app_name}}.conf
+
+# ===============================================================================
+# Ligttpd configuration
+# ===============================================================================
+
+lighttpd_modules:
+  - proxy
+  - magnet
+
+# ===============================================================================
+# Ligttpd configuration
+# ===============================================================================
+
+apache2_modules:
+  - expires
+  - headers
+  - macro
+  - mpm_event
+  - proxy
+  - proxy_http
+  - rewrite
