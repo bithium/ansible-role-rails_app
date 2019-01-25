@@ -5,3 +5,9 @@
   copy:
     src: files/rails.conf
     dest: "{{apache2_config_enabled_path}}/rails_app_macro.conf"
+
+- name: Install required Apache2 modules
+  apache2_module:
+    name: "{{item}}"
+  loop: "{{apache2_modules}}"
+  notify: restart apache2
