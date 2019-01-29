@@ -23,6 +23,7 @@
 - name: Create application database
   mysql_db:
     name: "{{rails_app_db.database}}"
+    encoding: "{{rails_app_db.encoding | default('utf8')}}"
     login_unix_socket: "{{mysql_socket_path}}"
 
 - name: Create application database user
