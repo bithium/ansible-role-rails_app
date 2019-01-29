@@ -1,11 +1,12 @@
 # Apache2 configuration for {{rails_app_name}}
 
-<IfModule macro_module>
 <VirtualHost *:80>
   # Don't allow client to fool Puma into thinking connection is secure
   RequestHeader unset X-Forwarded-Proto
 
-   Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "/tmp/puma_{{rails_app_name}}.socket"
+  <IfModule macro_module>
+    Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "{{rails_app_socket}}"
+  </IfModule>
 </VirtualHost>
 
 <IfModule mod_ssl.c>
@@ -13,7 +14,10 @@
     # Let Puma know that request came in on a secure connection
     RequestHeader set X-Forwarded-Proto "https"
 
-     Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "/tmp/puma_{{rails_app_name}}.socket"
+    <IfModule macro_module>
+      Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "{{rails_app_socket}}"
+    </IfModule>
+
+    SSLEngine On
   </VirtualHost>
-</IfModule>
 </IfModule>

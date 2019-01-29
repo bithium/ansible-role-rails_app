@@ -3,7 +3,7 @@ environment 'production'
 workers {{rails_app_puma_workers}}
 threads 1, {{rails_app_puma_threads}}
 
-bind 'unix:///tmp/puma_{{rails_app_name}}.socket'
+bind 'unix://{{rails_app_socket}}'
 
 stdout_redirect "{{rails_app_log_path}}/production.log",
                 "{{rails_app_log_path}}/production.log", true

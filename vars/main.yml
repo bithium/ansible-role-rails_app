@@ -4,6 +4,8 @@
 rails_app_proxy_config_path: >-
   {{rails_app_proxy_config_paths[rails_app_proxy]}}/99-{{rails_app_name}}.conf
 
+rails_app_socket: /run/{{rails_app_name}}/puma.socket
+
 # ===============================================================================
 # Ligttpd configuration
 # ===============================================================================
@@ -13,7 +15,7 @@ lighttpd_modules:
   - magnet
 
 # ===============================================================================
-# Ligttpd configuration
+# Apache2 configuration
 # ===============================================================================
 
 apache2_modules:

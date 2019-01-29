@@ -5,6 +5,6 @@ $HTTP["host"] == "{{rails_app_fqdn | mandatory}}" {
     magnet.attract-physical-path-to = ( "/etc/lighttpd/rails.lua" )
 
     proxy.server = ( "" => ( "{{rails_app_name}}" =>
-       ("host" => "/tmp/puma_{{rails_app_name}}.socket"),
+       ("host" => "{{rails_app_socket}}"),
     ))
 }
