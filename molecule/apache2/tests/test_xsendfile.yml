@@ -1,0 +1,12 @@
+# Molecule managed
+
+---
+
+http:
+  http://{{.Vars.rails_app.fqdn}}/tasks/download?path=notpresent.txt:
+    status: 404
+
+  http://{{.Vars.rails_app.fqdn}}/tasks/download?path=hello.txt:
+    status: 200
+    body:
+      - Hello World !!!

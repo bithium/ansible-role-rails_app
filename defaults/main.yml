@@ -26,6 +26,8 @@ rails_app_proxy_config_paths:
 
 rails_app_log_path: "{{rails_app_path}}/log"
 
+rails_app_files_path: "{{rails_app_path}}/storage"
+
 # rails_app_db_adapter:
 
 rails_app_db_config:

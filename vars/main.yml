@@ -18,6 +18,9 @@ lighttpd_modules:
 # Apache2 configuration
 # ===============================================================================
 
+apache2_packages:
+  - libapache2-mod-xsendfile
+
 apache2_modules:
   - expires
   - headers
@@ -26,3 +29,4 @@ apache2_modules:
   - proxy
   - proxy_http
   - rewrite
+  - xsendfile

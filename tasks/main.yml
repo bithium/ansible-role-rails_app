@@ -95,6 +95,9 @@
     dest: "{{rails_app_proxy_config_path}}"
   notify: restart {{rails_app_proxy}}
 
+- import_tasks: "{{rails_app_proxy}}.yml"
+  become: true
+
 - name: Enable application service
   systemd:
     name: "{{rails_app_name}}.service"

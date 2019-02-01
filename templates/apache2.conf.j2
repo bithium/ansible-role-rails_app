@@ -5,7 +5,7 @@
   RequestHeader unset X-Forwarded-Proto
 
   <IfModule macro_module>
-    Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "{{rails_app_socket}}"
+    Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "{{rails_app_files_path}}" "{{rails_app_socket}}"
   </IfModule>
 </VirtualHost>
 
@@ -15,7 +15,7 @@
     RequestHeader set X-Forwarded-Proto "https"
 
     <IfModule macro_module>
-      Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "{{rails_app_socket}}"
+      Use RailsApp "{{rails_app_fqdn | mandatory}}" "{{rails_app_path}}" "{{rails_app_files_path}}" "{{rails_app_socket}}"
     </IfModule>
 
     SSLEngine On

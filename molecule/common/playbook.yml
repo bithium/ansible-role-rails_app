@@ -59,6 +59,20 @@
       become_user: "{{rails_app_user}}"
       changed_when: false
 
+    - name: Create file for testing
+      copy:
+        dest: "{{rails_app_files_path}}/hello.txt"
+        content: |
+          Hello World !!!
+
     - name: Dump host variables for role
       template: src=config.yml.j2 dest={{goss_test_variables}}
-      notify: restart rails_app
+
+    - name: Restart services
+      service:
+        name: "{{item}}"
+        state: restarted
+      loop:
+        - "{{rails_app_name}}"
+        - "{{rails_app_proxy}}"
+      changed_when: false
