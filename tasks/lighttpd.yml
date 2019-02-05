@@ -11,6 +11,6 @@
 - name: Copy helper lua script.
   copy:
     src: ../files/rails.lua
-    dest: "{{lighttpd_config_dir}}/rails.lua"
+    dest: "{{lighttpd_config_path}}/rails.lua"
     owner: "{{lighttpd_user}}"
     group: "{{lighttpd_group}}"
