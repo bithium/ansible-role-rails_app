@@ -89,10 +89,20 @@
 - import_tasks: "{{rails_app_proxy}}.yml"
   become: true
 
+- name: Create rails_app configuration folders
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: "{{rails_app_proxy_user}}"
+    group: "{{rails_app_proxy_group}}"
+  loop:
+    - "{{rails_app_proxy_before_config_path}}"
+    - "{{rails_app_proxy_after_config_path}}"
+
 - name: Create proxy configuration file
   template:
     src: "{{rails_app_proxy}}.conf.j2"
-    dest: "{{rails_app_proxy_config_path}}"
+    dest: "{{rails_app_proxy_site_config_path}}"
   notify: restart {{rails_app_proxy}}
 
 - import_tasks: "{{rails_app_proxy}}.yml"

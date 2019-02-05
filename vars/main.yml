@@ -2,9 +2,18 @@
 # vars file for rails_app
 
 rails_app_proxy_config_path: >-
-  {{rails_app_proxy_config_paths[rails_app_proxy]}}/99-{{rails_app_name}}.conf
+  {{lookup('vars', rails_app_proxy + '_config_available_path')}}/{{rails_app_name}}
+
+rails_app_proxy_before_config_path: "{{rails_app_proxy_config_path}}/before"
+rails_app_proxy_after_config_path: "{{rails_app_proxy_config_path}}/after"
+
+rails_app_proxy_site_config_path: >-
+  {{lookup('vars', rails_app_proxy + '_sites_enabled_path')}}/99-{{rails_app_name}}.conf
 
 rails_app_socket: /run/{{rails_app_name}}/puma.socket
+
+rails_app_proxy_user: "{{lookup('vars', rails_app_proxy + '_user')}}"
+rails_app_proxy_group: "{{lookup('vars', rails_app_proxy + '_group')}}"
 
 # ===============================================================================
 # Ligttpd configuration
