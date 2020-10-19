@@ -3,21 +3,21 @@
 
 - name: Install database package dependencies
   package:
-    name: "{{item}}"
+    name: "{{ item }}"
   loop:
     - libpq-dev
     - python-psycopg2
 
 - name: Create application databases
-  postgresql_db: name={{rails_app_db.database}}
+  postgresql_db: name={{ rails_app_db.database }}
   become: true
   become_user: postgres
 
 - name: Create application database user
   postgresql_user:
-    db: "{{rails_app_db.database}}"
-    name: "{{rails_app_db.username}}"
-    password: "{{rails_app_db.password}}"
+    db: "{{ rails_app_db.database }}"
+    name: "{{ rails_app_db.username }}"
+    password: "{{ rails_app_db.password }}"
     priv: "ALL"
   become: true
   become_user: postgres

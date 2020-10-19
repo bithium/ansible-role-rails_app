@@ -11,29 +11,29 @@ rails_app_packages:
 
 rails_app_packages_extra: []
 
-rails_app_user: "{{rails_app_name}}"
-rails_app_path: "/var/www/{{rails_app_name}}"
+rails_app_user: "{{ rails_app_name }}"
+rails_app_path: "/var/www/{{ rails_app_name }}"
 
-rails_app_user_home: "{{rails_app_path}}"
+rails_app_user_home: "{{ rails_app_path }}"
 
-rails_app_config_path: "{{rails_app_path}}/config"
-rails_app_config_path_puma: "{{rails_app_config_path}}/puma.rb"
-rails_app_config_path_db: "{{rails_app_config_path}}/database.yml"
+rails_app_config_path: "{{ rails_app_path }}/config"
+rails_app_config_path_puma: "{{ rails_app_config_path }}/puma.rb"
+rails_app_config_path_db: "{{ rails_app_config_path }}/database.yml"
 
 rails_app_proxy_config_paths:
-  lighttpd: "{{lighttpd_config_enabled_dir | default(omit)}}"
-  apache2: "{{apache2_sites_enabled_path | default(omit)}}"
+  lighttpd: "{{ lighttpd_config_enabled_dir | default(omit) }}"
+  apache2: "{{ apache2_sites_enabled_path | default(omit) }}"
 
-rails_app_log_path: "{{rails_app_path}}/log"
+rails_app_log_path: "{{ rails_app_path }}/log"
 
-rails_app_files_path: "{{rails_app_path}}/storage"
+rails_app_files_path: "{{ rails_app_path }}/storage"
 
 # rails_app_db_adapter:
 
 rails_app_db_config:
   production: |
     {% set _dummy = rails_app_db.update({'adapter':rails_app_db_adapter}) %}
-    {{rails_app_db}}
+    {{ rails_app_db }}
 
 # rails_app_bundler: '>= 0'
 # rails_app_puma: '>= 0'

@@ -10,7 +10,7 @@
       mysql2: mariadb
 
     mariadb_root_password: >-
-      {{lookup('password', '/tmp/mariadb_password chars=ascii_letters,digits,hexdigits')}}
+      {{ lookup('password', '/tmp/mariadb_password chars=ascii_letters,digits,hexdigits') }}
 
   pre_tasks:
     - name: Setup image for keeping downloaded packages
@@ -20,7 +20,7 @@
       when: ansible_os_family == 'Debian'
 
   roles:
-    - "{{adapter_role[rails_app_db_adapter] | default(rails_app_db_adapter)}}"
+    - "{{ adapter_role[rails_app_db_adapter] | default(rails_app_db_adapter) }}"
 
   tasks:
 
@@ -30,18 +30,19 @@
     - name: Download rails application code
       git:
         repo: https://github.com/bithium/rails_app_todo.git
-        dest: "{{rails_app_path}}"
+        dest: "{{ rails_app_path }}"
         force: true
         depth: 1
+        version: aeab3d08b45df3d3b42bfffd1d8140631f7aa0ff
 
     - name: Fix checkout folder permission's
       file:
-        path: "{{rails_app_path}}"
+        path: "{{ rails_app_path }}"
         mode: "o+w"
         recurse: true
 
     - name: Tweak hosts file for application testing
       lineinfile:
         path: "/etc/hosts"
-        line: "127.0.0.1  {{rails_app_fqdn}}"
+        line: "127.0.0.1  {{ rails_app_fqdn }}"
         unsafe_writes: true

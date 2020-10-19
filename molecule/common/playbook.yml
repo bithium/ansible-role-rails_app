@@ -13,7 +13,7 @@
       mysql2: >-
         'mysql2', '>= 0.4.4', '< 0.6.0'
 
-    rails_app_proxy: "{{lookup('env', 'RAILS_APP_PROXY')}}"
+    rails_app_proxy: "{{ lookup('env', 'RAILS_APP_PROXY') }}"
 
   roles:
     - role: rails_app
@@ -24,55 +24,57 @@
   tasks:
     - name: Add support for connecting to database
       copy:
-        dest: "{{rails_app_path}}/Gemfile.local"
-        content: "gem {{db_to_gem[rails_app_db_adapter] | mandatory}}"
+        dest: "{{ rails_app_path }}/Gemfile.local"
+        content: "gem {{ db_to_gem[rails_app_db_adapter] | mandatory }}"
+        mode: 0644
       become: true
-      become_user: "{{rails_app_user}}"
+      become_user: "{{ rails_app_user }}"
 
     - name: Install required gems
-      command: bundle install --without development test --path={{rubygems_path}}
+      command: bundle install --without development test --path={{ rubygems_path }}
       args:
-        chdir: "{{rails_app_path}}"
-        creates: "{{rails_app_path}}/Gemfile.lock"
+        chdir: "{{ rails_app_path }}"
+        creates: "{{ rails_app_path }}/Gemfile.lock"
       environment:
-        PATH: "{{rubygems_path}}/bin:{{ ansible_env.PATH }}"
+        PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
       become: true
-      become_user: "{{rails_app_user}}"
+      become_user: "{{ rails_app_user }}"
 
     - name: Run database migrations
       command: rake db:migrate
       args:
-        chdir: "{{rails_app_path}}"
+        chdir: "{{ rails_app_path }}"
       environment:
-        PATH: "{{rubygems_path}}/bin:{{ ansible_env.PATH }}"
+        PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
       become: true
-      become_user: "{{rails_app_user}}"
+      become_user: "{{ rails_app_user }}"
       changed_when: false
 
     - name: Create tasks for testing
       command: rake db:seed
       args:
-        chdir: "{{rails_app_path}}"
+        chdir: "{{ rails_app_path }}"
       environment:
-        PATH: "{{rubygems_path}}/bin:{{ ansible_env.PATH }}"
+        PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
       become: true
-      become_user: "{{rails_app_user}}"
+      become_user: "{{ rails_app_user }}"
       changed_when: false
 
     - name: Create file for testing
       copy:
-        dest: "{{rails_app_files_path}}/hello.txt"
+        dest: "{{ rails_app_files_path }}/hello.txt"
         content: |
           Hello World !!!
+        mode: 0644
 
     - name: Dump host variables for role
-      template: src=config.yml.j2 dest={{goss_test_variables}}
+      template: src=config.yml.j2 dest={{ goss_test_variables }} mode=0644
 
     - name: Restart services
       service:
-        name: "{{item}}"
+        name: "{{ item }}"
         state: restarted
       loop:
-        - "{{rails_app_name}}"
-        - "{{rails_app_proxy}}"
+        - "{{ rails_app_name }}"
+        - "{{ rails_app_proxy }}"
       changed_when: false

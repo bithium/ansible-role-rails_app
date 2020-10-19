@@ -3,8 +3,11 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
 platforms:
   - name: rails_app-ubuntu-18.04
     image: ubuntu:18.04
@@ -27,12 +30,10 @@ provisioner:
   env:
     RAILS_APP_DB: postgresql
     RAILS_APP_PROXY: lighttpd
-  lint:
-    name: ansible-lint
+  lint: |
+    set -e
+    yamllint .
+    ansible-lint
+    flake8
 scenario:
   name: default
-verifier:
-  name: goss
-  lint:
-    name: yamllint
-    enabled: false

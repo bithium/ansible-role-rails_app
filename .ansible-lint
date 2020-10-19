@@ -1,0 +1,8 @@
+# vim: ft=yaml
+# -*-YAML-*-
+---
+exclude_paths:
+  - molecule/common/tests/
+  - molecule/default/tests/
+  - molecule/apache2/tests/
+  - molecule/mariadb/tests/

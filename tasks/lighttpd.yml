@@ -2,7 +2,7 @@
 # Ligttpd tasks for rails_app
 
 - name: Install lighttpd specific packages
-  package: name={{packages}}
+  package: name={{ packages }}
   vars:
     packages:
       - lighttpd-mod-magnet
@@ -10,7 +10,8 @@
 
 - name: Copy helper lua script.
   copy:
-    src: ../files/rails.lua
-    dest: "{{lighttpd_config_path}}/rails.lua"
-    owner: "{{lighttpd_user}}"
-    group: "{{lighttpd_group}}"
+    src: files/rails.lua
+    dest: "{{ lighttpd_config_path }}/rails.lua"
+    owner: "{{ lighttpd_user }}"
+    group: "{{ lighttpd_group }}"
+    mode: 0644

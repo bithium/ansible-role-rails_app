@@ -3,17 +3,17 @@
 
 - name: Install required packages
   package:
-    name: "{{rails_app_packages | union(rails_app_packages_extra)}}"
+    name: "{{ rails_app_packages | union(rails_app_packages_extra) }}"
   become: true
 
 - name: Create rails app system user
   user:
-    name: "{{rails_app_user}}"
-    home: "{{rails_app_user_home}}"
-    comment: Account used by {{rails_app_name}} puma server
+    name: "{{ rails_app_user }}"
+    home: "{{ rails_app_user_home }}"
+    comment: Account used by {{ rails_app_name }} puma server
   become: true
 
-- import_tasks: "{{rails_app_db_adapter}}.yml"
+- import_tasks: "{{ rails_app_db_adapter }}.yml"
   become: true
 
 - name: Read rubygems path for application user
@@ -22,95 +22,101 @@
     warn: false
   register: rubygems_path_output
   become: true
-  become_user: "{{rails_app_user}}"
+  become_user: "{{ rails_app_user }}"
   check_mode: false
   changed_when: false
   tags: always
 
 - name: Set fact for rubygems path
   set_fact:
-    rubygems_path: "{{rubygems_path_output.stdout | trim}}"
+    rubygems_path: "{{ rubygems_path_output.stdout | trim }}"
   tags: always
 
 - name: Install rake gem
   gem:
     name: "rake"
-    version: "{{rails_app_rake | default(omit)}}"
+    version: "{{ rails_app_rake | default(omit) }}"
     state: present
   become: true
-  become_user: "{{rails_app_user}}"
+  become_user: "{{ rails_app_user }}"
 
 - name: Install bundler gem
   gem:
     name: "bundler"
-    version: "{{rails_app_bundler | default(omit)}}"
+    version: "{{ rails_app_bundler | default(omit) }}"
     state: present
   become: true
-  become_user: "{{rails_app_user}}"
+  become_user: "{{ rails_app_user }}"
 
 - name: Install puma gem
   gem:
     name: "puma"
-    version: "{{rails_app_puma | default(omit)}}"
+    version: "{{ rails_app_puma | default(omit) }}"
     state: present
   environment:
     DISABLE_SSL: 1
   become: true
-  become_user: "{{rails_app_user}}"
+  become_user: "{{ rails_app_user }}"
 
 - name: Ensure configuration path exists
   file:
-    path: "{{rails_app_config_path}}"
+    path: "{{ rails_app_config_path }}"
     state: directory
-    owner: "{{rails_app_user}}"
-    group: "{{rails_app_user}}"
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_user }}"
+    mode: 0755
 
 - name: Create database configuration file
   copy:
-    dest: "{{rails_app_config_path_db}}"
-    content: "{{rails_app_db_config | to_nice_yaml}}"
+    dest: "{{ rails_app_config_path_db }}"
+    content: "{{ rails_app_db_config | to_nice_yaml }}"
+    mode: 0644
   become: true
-  become_user: "{{rails_app_user}}"
+  become_user: "{{ rails_app_user }}"
 
 - name: Create puma configuration file
   template:
     src: puma.rb.j2
-    dest: "{{rails_app_config_path_puma}}"
+    dest: "{{ rails_app_config_path_puma }}"
+    mode: 0644
   become: true
-  become_user: "{{rails_app_user}}"
+  become_user: "{{ rails_app_user }}"
   notify: restart rails_app
 
 - name: Create puma systemd service file for application
   template:
     src: puma.service.j2
-    dest: "/etc/systemd/system/{{rails_app_name}}.service"
+    dest: "/etc/systemd/system/{{ rails_app_name }}.service"
+    mode: 0644
   become: true
 
-- import_tasks: "{{rails_app_proxy}}.yml"
+- import_tasks: "{{ rails_app_proxy }}.yml"
   become: true
 
 - name: Create rails_app configuration folders
   file:
-    path: "{{item}}"
+    path: "{{ item }}"
     state: directory
-    owner: "{{rails_app_proxy_user}}"
-    group: "{{rails_app_proxy_group}}"
+    owner: "{{ rails_app_proxy_user }}"
+    group: "{{ rails_app_proxy_group }}"
+    mode: 0755
   loop:
-    - "{{rails_app_proxy_before_config_path}}"
-    - "{{rails_app_proxy_after_config_path}}"
+    - "{{ rails_app_proxy_before_config_path }}"
+    - "{{ rails_app_proxy_after_config_path }}"
 
 - name: Create proxy configuration file
   template:
-    src: "{{rails_app_proxy}}.conf.j2"
-    dest: "{{rails_app_proxy_site_config_path}}"
-  notify: restart {{rails_app_proxy}}
+    src: "{{ rails_app_proxy }}.conf.j2"
+    dest: "{{ rails_app_proxy_site_config_path }}"
+    mode: 0644
+  notify: restart {{ rails_app_proxy }}
 
-- import_tasks: "{{rails_app_proxy}}.yml"
+- import_tasks: "{{ rails_app_proxy }}.yml"
   become: true
 
 - name: Enable application service
   systemd:
-    name: "{{rails_app_name}}.service"
+    name: "{{ rails_app_name }}.service"
     enabled: true
     daemon_reload: true
   become: true

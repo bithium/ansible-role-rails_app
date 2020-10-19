@@ -3,7 +3,7 @@
 
 - name: Install database package dependencies
   package:
-    name: "{{item}}"
+    name: "{{ item }}"
   loop:
     - libmysqlclient-dev
     - python-pymysql
@@ -18,17 +18,17 @@
 
     - name: Set configuration value fact
       set_fact:
-        mysql_socket_path: "{{mysql_config_results.stdout | trim}}"
+        mysql_socket_path: "{{ mysql_config_results.stdout | trim }}"
 
 - name: Create application database
   mysql_db:
-    name: "{{rails_app_db.database}}"
-    encoding: "{{rails_app_db.encoding | default('utf8')}}"
-    login_unix_socket: "{{mysql_socket_path}}"
+    name: "{{ rails_app_db.database }}"
+    encoding: "{{ rails_app_db.encoding | default('utf8') }}"
+    login_unix_socket: "{{ mysql_socket_path }}"
 
 - name: Create application database user
   mysql_user:
-    name: "{{rails_app_db.username}}"
-    password: "{{rails_app_db.password}}"
-    priv: "{{rails_app_db.database}}.*:ALL"
-    login_unix_socket: "{{mysql_socket_path}}"
+    name: "{{ rails_app_db.username }}"
+    password: "{{ rails_app_db.password }}"
+    priv: "{{ rails_app_db.database }}.*:ALL"
+    login_unix_socket: "{{ mysql_socket_path }}"

@@ -3,6 +3,6 @@
 
 - name: restart rails_app
   service:
-    name: "{{rails_app_name}}"
+    name: "{{ rails_app_name }}"
     state: restarted
-  notify: restart {{rails_app_proxy}}
+  notify: restart {{ rails_app_proxy }}
