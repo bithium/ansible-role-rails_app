@@ -16,6 +16,10 @@ platforms:
     command: /sbin/init
 provisioner:
   name: ansible
+  # log: true
+  config_options:
+    defaults:
+      interpreter_python: "/usr/bin/python3"
   playbooks:
     prepare: ../common/prepare.yml
     converge: ../common/playbook.yml

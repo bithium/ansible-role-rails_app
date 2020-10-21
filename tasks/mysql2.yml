@@ -6,7 +6,7 @@
     name: "{{ item }}"
   loop:
     - libmysqlclient-dev
-    - python-pymysql
+    - python3-pymysql
 
 - name: Set MariaDB socket path fact
   block:
