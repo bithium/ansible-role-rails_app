@@ -15,6 +15,12 @@ platforms:
       - "/mnt/mirrors/ubuntu/18.04:/var/cache/apt/archives"
       - "/mnt/mirrors/repos:/var/cache/repos"
     command: /sbin/init
+  - name: rails_app-ubuntu-20.04
+    image: ubuntu:20.04
+    volumes:
+      - "/mnt/mirrors/ubuntu/20.04:/var/cache/apt/archives"
+      - "/mnt/mirrors/repos:/var/cache/repos"
+    command: /lib/systemd/systemd
 provisioner:
   name: ansible
   # log: true
