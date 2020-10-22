@@ -9,6 +9,12 @@ lint: |
   ansible-lint
   flake8
 platforms:
+  - name: rails_app-debian-stable
+    image: debian:stable
+    volumes:
+      - "/mnt/mirrors/debian/stable:/var/cache/apt/archives"
+      - "/mnt/mirrors/repos:/var/cache/repos"
+    command: /lib/systemd/systemd
   - name: rails_app-ubuntu-18.04
     image: ubuntu:18.04
     volumes:
