@@ -1,0 +1,71 @@
+---
+# Checkout tasks for rails_app
+
+- name: Download rails application code  # noqa 401
+  git:
+    repo: "{{ rails_app_repo_url }}"
+    dest: "{{ rails_app_repo_path }}"
+    bare: true
+    update: true
+
+- name: Deploy application code
+  git:
+    repo: "{{ rails_app_repo_path }}"
+    dest: "{{ rails_app_version_path }}"
+    depth: 1
+    version: "{{ rails_app_version | default('HEAD') }}"
+    update: false
+
+- name: Link database configuration
+  file:
+    src: "{{ rails_app_config_path_db }}"
+    dest: "{{ rails_app_version_path }}/config/database.yml"
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_user }}"
+    state: "link"
+
+- name: Link puma configuration
+  file:
+    src: "{{ rails_app_config_path_puma }}"
+    dest: "{{ rails_app_version_path }}/config/puma.rb"
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_user }}"
+    state: "link"
+    force: true
+
+- name: Link shared folders
+  include_tasks: link_path.yml
+  loop:
+    - storage
+    - log
+
+- name: Set active version
+  file:
+    src: "{{ rails_app_version_path }}"
+    dest: "{{ rails_app_path }}"
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_user }}"
+    state: "link"
+  when: rails_app_version is defined
+
+- name: Add support for connecting to database
+  copy:
+    dest: "{{ rails_app_path }}/Gemfile.local"
+    content: "gem {{ db_to_gem[rails_app_db_adapter] | mandatory }}"
+    mode: 0644
+
+- name: Install required gems
+  command: bundle install --without development test --path={{ rubygems_path }}
+  args:
+    chdir: "{{ rails_app_path }}"
+    creates: "{{ rails_app_path }}/Gemfile.lock"
+  environment:
+    PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
+
+- name: Run database migrations
+  command: rake db:migrate
+  args:
+    chdir: "{{ rails_app_path }}"
+  environment:
+    PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
+  changed_when: false

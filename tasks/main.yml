@@ -66,6 +66,22 @@
     group: "{{ rails_app_user }}"
     mode: 0755
 
+- name: Ensure logs path exists
+  file:
+    path: "{{ rails_app_log_path }}"
+    state: directory
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_user }}"
+    mode: 0755
+
+- name: Ensure storage path exists
+  file:
+    path: "{{ rails_app_files_path }}"
+    state: directory
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_proxy_group }}"
+    mode: 0755
+
 - name: Create database configuration file
   copy:
     dest: "{{ rails_app_config_path_db }}"
@@ -113,6 +129,12 @@
 
 - import_tasks: "{{ rails_app_proxy }}.yml"
   become: true
+
+- import_tasks: "checkout.yml"
+  when: rails_app_repo_url is defined
+  become: true
+  become_user: "{{ rails_app_user }}"
+  tags: rails_app_checkout
 
 - name: Enable application service
   systemd:

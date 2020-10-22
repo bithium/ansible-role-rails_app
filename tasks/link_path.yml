@@ -1,0 +1,20 @@
+---
+- name: Check if {{ item }} folder is present
+  stat:
+    path: "{{ rails_app_version_path }}/{{ item }}"
+  register: rails_app_shared_file
+
+- name: Remove existing `{{ item }}` folder
+  file:
+    path: "{{ rails_app_version_path }}/{{ item }}"
+    state: absent
+  when: >-
+    rails_app_shared_file.stat.exists and
+    rails_app_shared_file.stat.isdir and
+    not rails_app_shared_file.stat.islnk
+
+- name: Link {{ item }} folder
+  file:
+    src: "{{ rails_app_shared_path }}/{{ item }}"
+    dest: "{{ rails_app_version_path }}/{{ item }}"
+    state: "link"

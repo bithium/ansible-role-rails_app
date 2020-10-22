@@ -11,7 +11,7 @@ package:
 user:
   {{.Vars.rails_app.user}}:
     exists: true
-    home: {{.Vars.rails_app.path}}
+    home: {{.Vars.rails_app.home}}
 
 service:
   {{.Vars.rails_app.name}}:

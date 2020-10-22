@@ -24,22 +24,14 @@
 
   tasks:
 
-    - name: Install dependencies
-      package: name=git
-
-    - name: Download rails application code
+    - name: Update demo application code  # noqa 401
       git:
-        repo: https://github.com/bithium/rails_app_todo.git
-        dest: "{{ rails_app_path }}"
-        force: true
-        depth: 1
-        version: aeab3d08b45df3d3b42bfffd1d8140631f7aa0ff
-
-    - name: Fix checkout folder permission's
-      file:
-        path: "{{ rails_app_path }}"
-        mode: "o+w"
-        recurse: true
+        repo: "https://github.com/bithium/rails_app_todo.git"
+        dest: "/mnt/mirrors/repos/{{ rails_app_name }}"
+        bare: true
+        update: true
+      run_once: true
+      delegate_to: localhost
 
     - name: Tweak hosts file for application testing
       lineinfile:

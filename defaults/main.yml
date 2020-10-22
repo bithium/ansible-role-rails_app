@@ -3,6 +3,7 @@
 
 rails_app_packages:
   - gcc
+  - git
   - make
   - ruby
   - ruby-dev
@@ -11,12 +12,18 @@ rails_app_packages:
 
 rails_app_packages_extra: []
 
+# rails_app_version:
+
 rails_app_user: "{{ rails_app_name }}"
-rails_app_path: "/var/www/{{ rails_app_name }}"
+rails_app_user_home: "/var/www/{{ rails_app_name }}"
 
-rails_app_user_home: "{{ rails_app_path }}"
+rails_app_path: "{{ rails_app_user_home }}/current"
+rails_app_repo_path: "{{ rails_app_user_home }}/repo"
+rails_app_version_path: "{{ rails_app_user_home }}/{{ rails_app_version | default('current') }}"
 
-rails_app_config_path: "{{ rails_app_path }}/config"
+rails_app_shared_path: "{{ rails_app_user_home }}/shared"
+
+rails_app_config_path: "{{ rails_app_shared_path }}/config"
 rails_app_config_path_puma: "{{ rails_app_config_path }}/puma.rb"
 rails_app_config_path_db: "{{ rails_app_config_path }}/database.yml"
 
@@ -24,9 +31,10 @@ rails_app_proxy_config_paths:
   lighttpd: "{{ lighttpd_config_enabled_dir | default(omit) }}"
   apache2: "{{ apache2_sites_enabled_path | default(omit) }}"
 
-rails_app_log_path: "{{ rails_app_path }}/log"
+rails_app_log_path: "{{ rails_app_shared_path }}/log"
+rails_app_files_path: "{{ rails_app_shared_path }}/storage"
 
-rails_app_files_path: "{{ rails_app_path }}/storage"
+# rails_app_repo_url: ""
 
 # rails_app_db_adapter:
 

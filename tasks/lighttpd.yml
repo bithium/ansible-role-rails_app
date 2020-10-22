@@ -8,7 +8,7 @@
       - lighttpd-mod-magnet
       - lua5.3
 
-- name: Copy helper lua script.
+- name: Copy helper lua script
   copy:
     src: files/rails.lua
     dest: "{{ lighttpd_config_path }}/rails.lua"
