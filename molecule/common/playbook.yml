@@ -49,7 +49,7 @@
       service:
         name: "{{ item }}"
         state: restarted
-      loop:
+      with_items:
         - "{{ rails_app_name }}"
         - "{{ rails_app_proxy }}"
       changed_when: false

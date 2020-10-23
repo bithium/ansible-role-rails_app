@@ -4,9 +4,7 @@
 - name: Install database package dependencies
   package:
     name: "{{ item }}"
-  loop:
-    - libpq-dev
-    - python3-psycopg2
+  loop: "{{ rails_app_postgresql }}"
 
 - name: Create application databases
   postgresql_db: name={{ rails_app_db.database }}

@@ -1,6 +1,20 @@
 ---
 # tasks file for rails_app
 
+- name: Include OS specific configuration values
+  include_vars: "{{ config_file }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "{{ ansible_os_family | lower }}.yml"
+        - "{{ ansible_system | lower }}.yml"
+      paths:
+        - "{{ role_path }}/vars"
+  loop_control:
+    loop_var: config_file
+
 - name: Install required packages
   package:
     name: "{{ rails_app_packages | union(rails_app_packages_extra) }}"
@@ -97,7 +111,7 @@
     mode: 0644
   become: true
   become_user: "{{ rails_app_user }}"
-  notify: restart rails_app
+  notify: restart {{ rails_app_name }}
 
 - name: Create puma systemd service file for application
   template:
@@ -105,11 +119,20 @@
     dest: "/etc/systemd/system/{{ rails_app_name }}.service"
     mode: 0644
   become: true
+  when: ansible_os_family == 'Debian'
+
+- name: Create puma OpenRC service file for application
+  template:
+    src: puma.openrc.j2
+    dest: "/etc/init.d/{{ rails_app_name }}"
+    mode: 0755
+  become: true
+  when: ansible_os_family == 'Alpine'
 
 - import_tasks: "{{ rails_app_proxy }}.yml"
   become: true
 
-- name: Create rails_app configuration folders
+- name: Create application's proxy configuration folders
   file:
     path: "{{ item }}"
     state: directory
@@ -137,8 +160,7 @@
   tags: rails_app_checkout
 
 - name: Enable application service
-  systemd:
-    name: "{{ rails_app_name }}.service"
+  service:
+    name: "{{ rails_app_name }}"
     enabled: true
-    daemon_reload: true
   become: true

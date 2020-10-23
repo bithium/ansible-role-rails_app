@@ -4,9 +4,7 @@
 - name: Install lighttpd specific packages
   package: name={{ packages }}
   vars:
-    packages:
-      - lighttpd-mod-magnet
-      - lua5.3
+    packages: "{{ rails_app_lighttpd }}"
 
 - name: Copy helper lua script
   copy:

@@ -1,16 +1,6 @@
 ---
 # defaults file for rails_app
 
-rails_app_packages:
-  - gcc
-  - git
-  - make
-  - ruby
-  - ruby-dev
-  - ruby-bundler
-  - tzdata
-  - zlib1g-dev
-
 rails_app_packages_extra: []
 
 # rails_app_version:

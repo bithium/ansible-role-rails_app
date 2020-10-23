@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+
+name="{{ rails_app_name }}"
+command="{{ rubygems_path }}/bin/puma"
+command_user="{{ rails_app_user }}"
+command_background="yes"
+start_stop_daemon_args="-d {{ rails_app_path }}"
+pidfile="{{ rails_app_socket | dirname }}/{{ rails_app_name }}.pid"
+
+depend() {
+  before {{ rails_app_proxy }}
+  after {{ rails_app_db_adapter }}
+}
+
+start_pre() {
+  checkpath --directory --owner $command_user:$command_user --mode 0775 "{{ rails_app_socket | dirname }}"
+}

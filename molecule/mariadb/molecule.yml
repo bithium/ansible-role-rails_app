@@ -9,6 +9,12 @@ lint: |
   ansible-lint
   flake8
 platforms:
+  - name: rails_app-alpine-3.11
+    image: alpine:3.11
+    volumes:
+      - "/mnt/mirrors/alpine/3.11:/var/cache/apk"
+      - "/mnt/mirrors/repos:/var/cache/repos"
+    command: /sbin/init
   - name: rails_app-debian-stable
     image: debian:stable
     volumes:

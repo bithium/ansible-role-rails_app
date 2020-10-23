@@ -1,0 +1,24 @@
+---
+# Variables for Debian base systems.
+
+rails_app_packages:
+  - gcc
+  - git
+  - make
+  - ruby
+  - ruby-dev
+  - ruby-bundler
+  - tzdata
+  - zlib1g-dev
+
+rails_app_postgresql:
+  - libpq-dev
+  - python3-psycopg2
+
+rails_app_mysql2:
+  - libmariadb-dev-compat
+  - python3-pymysql
+
+rails_app_lighttpd:
+  - lighttpd-mod-magnet
+  - lua5.3

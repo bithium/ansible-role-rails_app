@@ -4,9 +4,7 @@
 - name: Install database package dependencies
   package:
     name: "{{ item }}"
-  loop:
-    - libmysqlclient-dev
-    - python3-pymysql
+  loop: "{{ rails_app_mysql2 }}"
 
 - name: Set MariaDB socket path fact
   block:

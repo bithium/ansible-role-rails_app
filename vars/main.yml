@@ -27,10 +27,16 @@ lighttpd_modules:
 # Apache2 configuration
 # ===============================================================================
 
-apache2_packages:
-  - libapache2-mod-xsendfile
+apache2_os_packages:
+  Alpine:
+    - apache2-proxy
+  Debian:
+    - libapache2-mod-xsendfile
+
+apache2_packages: "{{ apache2_os_packages[ansible_os_family] | default([]) }}"
 
 apache2_modules:
+  - deflate
   - expires
   - headers
   - macro
