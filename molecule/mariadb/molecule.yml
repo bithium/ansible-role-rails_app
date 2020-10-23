@@ -15,6 +15,12 @@ platforms:
       - "/mnt/mirrors/alpine/3.11:/var/cache/apk"
       - "/mnt/mirrors/repos:/var/cache/repos"
     command: /sbin/init
+  - name: rails_app-alpine-3.12
+    image: alpine:3.12
+    volumes:
+      - "/mnt/mirrors/alpine/3.12:/var/cache/apk"
+      - "/mnt/mirrors/repos:/var/cache/repos"
+    command: /sbin/init
   - name: rails_app-debian-stable
     image: debian:stable
     volumes:
