@@ -2,18 +2,13 @@
 # tasks file for rails_app
 
 - name: Include OS specific configuration values
-  include_vars: "{{ config_file }}"
-  with_first_found:
-    - files:
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml"
-        - "{{ ansible_distribution | lower }}.yml"
-        - "{{ ansible_os_family | lower }}.yml"
-        - "{{ ansible_system | lower }}.yml"
-      paths:
-        - "{{ role_path }}/vars"
-  loop_control:
-    loop_var: config_file
+  include_vars:
+    dir: "{{ role_path }}/vars"
+    files_matching: "\
+      {{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml|\
+      {{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml|\
+      {{ ansible_distribution | lower }}.yml|{{ ansible_os_family | lower }}.yml|\
+      {{ ansible_system | lower }}.yml"
 
 - name: Install required packages
   package:

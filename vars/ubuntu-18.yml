@@ -1,0 +1,6 @@
+---
+# Variables for Ubuntu 18.04 base systems.
+
+rails_app_mysql2:
+  - libmysqlclient-dev
+  - python3-pymysql
