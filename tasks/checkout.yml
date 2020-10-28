@@ -54,6 +54,24 @@
     content: "gem {{ db_to_gem[rails_app_db_adapter] | mandatory }}"
     mode: 0644
 
+- name: Setup gem cache for bundler
+  block:
+    - name: Add proxy for 'https://rubygems.org'
+      command: bundle config mirror.https://rubygems.org {{ rails_app_gems_cache_proxy }}
+      args:
+        chdir: "{{ rails_app_path }}"
+      environment:
+        PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
+      changed_when: false
+    - name: Allow fallback if proxy cache not running
+      command: bundle config mirror.https://rubygems.org.fallback_timeout 1
+      args:
+        chdir: "{{ rails_app_path }}"
+      environment:
+        PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
+      changed_when: false
+  when: rails_app_gems_cache_proxy is defined
+
 - name: Install required gems
   command: bundle install --without development test --path={{ rubygems_path }}
   args:
