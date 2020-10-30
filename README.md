@@ -23,21 +23,7 @@ global `become: yes`, or invoke the role in your playbook like:
 Role Variables
 --------------
 
-Available variables are listed below, along with default values (see `defaults/main.yml` and `vars/main.yml`):
-
- * Packages installed with this role:
-
-   ```yaml
-   rails_app_packages:
-     - gcc
-     - libpq-dev
-     - make
-     - python-psycopg2
-     - ruby
-     - ruby-dev
-     - tzdata
-     - zlib1g-dev
-   ```
+Available variables are listed below, along with default values (see `defaults/main.yml` and `vars/main.yml` for more information):
 
  * Extra packages to install: `rails_app_packages_extra: []`
 
@@ -45,13 +31,29 @@ Available variables are listed below, along with default values (see `defaults/m
 
  * Username for the application user: `rails_app_user: "{{rails_app_name}}"`
 
- * System path to install the application to: `rails_app_path: "/var/www/{{rails_app_name}}"`
+ * Home folder for application user: `rails_app_user_home: "/var/www/{{rails_app_name}}"`
 
- * Path to place the configuration files to: `rails_app_config_path: "{{rails_app_path}}/config"`
+ * Path to install the application to: `rails_app_path: "{{ rails_app_user_home }}/current"`
 
- * Puma server configuration file path: `rails_app_config_path_puma: "{{rails_app_config_path}}/puma.rb"`
+ * URL to git clone the application code from: `rails_app_repo_url` [Undefined]
 
- * Rails database configuration file path: `rails_app_config_path_db: "{{rails_app_config_path}}/database.yml"`
+ * Path to git clone application code to: `rails_app_repo_path: "{{ rails_app_user_home }}/repo"`
+
+ * Application version to checkout as current: `rails_app_version` [Undefined]
+
+ * Path to checkout version to: `rails_app_version_path: "{{ rails_app_user_home }}/{{ rails_app_version | default('current') }}"`
+
+ * Path for shared configuration/data: `rails_app_shared_path: "{{ rails_app_user_home }}/shared"`
+
+ * Path for shared configuration: `rails_app_config_path: "{{ rails_app_shared_path }}/config"`
+
+ * Puma server configuration file path: `rails_app_config_path_puma: "{{ rails_app_config_path }}/puma.rb"`
+
+ * Rails database configuration file path: `rails_app_config_path_db: "{{ rails_app_config_path }}/database.yml"`
+
+ * Rails log files path: `rails_app_log_path: "{{ rails_app_shared_path }}/log"`
+
+ * Rails files storage path: `rails_app_files_path: "{{ rails_app_shared_path }}/storage"`
 
  * Database connection configuration: `rails_app_db`
 
@@ -59,14 +61,6 @@ Available variables are listed below, along with default values (see `defaults/m
    scoped by the environment.
 
    NOTE: The adapter field **MUST** be specified in the `rails_app_db_adapter`.
-
- * Lighttpd application configuration file path:
-
-   ```yaml
-   rails_app_config_path_lighttpd: "{{lighttpd_config_enabled_dir}}/99-{{rails_app_name}}.conf"
-   ```
-
- * Path to write puma log files: `rails_app_log_path: "{{rails_app_path}}/log"`
 
  * Bundler gem version to install: rails_app_bundler: '>= 0'
 
@@ -82,10 +76,19 @@ Available variables are listed below, along with default values (see `defaults/m
    - postgresql
    - mysql2
 
+ * HTTP application proxy configuration file path:
+
+   ```yaml
+  rails_app_proxy_site_config_path: >-
+    {{ lookup('vars', rails_app_proxy + '_sites_enabled_path') }}/99-{{ rails_app_name }}.conf
+   ```
+
+ * Puma Application server socket: `rails_app_socket: /run/{{ rails_app_name }}/puma.socket`
+
 Dependencies
 ------------
 
-This role depends on Bithium's lighttpd role.
+This role depends on Bithium's lighttpd role, or Bithium's apache2 role.
 
 Example Playbook
 ----------------
