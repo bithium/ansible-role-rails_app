@@ -4,10 +4,11 @@
 rails_app_packages:
   - gcc
   - git
+  - logrotate
   - make
   - ruby
-  - ruby-dev
   - ruby-bundler
+  - ruby-dev
   - tzdata
   - zlib1g-dev
 

@@ -1,0 +1,9 @@
+{{rails_app_log_path}}/*.log {
+  {{rails_app_logrotate_period}}
+  rotate {{rails_app_logrotate_keep}}
+  compress
+  missingok
+  delaycompress
+  notifempty
+  copytruncate
+}

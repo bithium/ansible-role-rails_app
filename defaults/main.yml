@@ -39,3 +39,8 @@ rails_app_db_config:
 
 rails_app_puma_workers: 2
 rails_app_puma_threads: 16
+
+logrotate_config_path: /etc/logrotate.d/
+rails_app_logrotate_path: "{{ logrotate_config_path }}/{{ rails_app_name }}"
+rails_app_logrotate_period: weekly
+rails_app_logrotate_keep: 52

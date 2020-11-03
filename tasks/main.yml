@@ -154,6 +154,13 @@
   become_user: "{{ rails_app_user }}"
   tags: rails_app_checkout
 
+- name: Create `logrotate` configuration file
+  template:
+    src: logrotate.j2
+    dest: "{{ rails_app_logrotate_path }}"
+    mode: 0644
+  become: true
+
 - name: Enable application service
   service:
     name: "{{ rails_app_name }}"
