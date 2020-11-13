@@ -1,0 +1,48 @@
+# Molecule managed
+
+---
+
+package:
+{{range .Vars.rails_app.packages}}
+  {{.}}:
+    installed: true
+{{end}}
+
+user:
+  {{.Vars.rails_app.user}}:
+    exists: true
+    home: {{.Vars.rails_app.home}}
+
+service:
+  {{.Vars.rails_app.name}}:
+    enabled: true
+    running: false
+
+file:
+  {{.Vars.rails_app.proxy}}:
+    exists: true
+
+  /etc/hosts:
+    exists: true
+    owner: root
+    group: root
+    contains:
+      - {{.Vars.rails_app.fqdn}}
+
+  /etc/logrotate.d/{{.Vars.rails_app.name}}:
+    exists: true
+    owner: root
+    group: root
+    contains:
+      - {{.Vars.rails_app.log}}/*.log
+      - 'weekly'
+      - rotate 52
+      - compress
+      - missingok
+      - delaycompress
+      - notifempty
+      - copytruncate
+
+http:
+  http://{{.Vars.rails_app.fqdn}}:
+    status: 503

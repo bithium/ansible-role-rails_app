@@ -45,22 +45,17 @@ provisioner:
   config_options:
     defaults:
       interpreter_python: "/usr/bin/python3"
-  inventory:
-    group_vars:
-      all:
-        rails_app_repo_url: '/var/cache/repos/todo'
-        rails_app_version: 'v0.2.1'
   playbooks:
     prepare: ../common/prepare.yml
     converge: ../common/playbook.yml
     verify: ../common/verify.yml
   env:
     RAILS_APP_DB: postgresql
-    RAILS_APP_PROXY: apache2
+    RAILS_APP_PROXY: lighttpd
   lint: |
     set -e
     yamllint .
     ansible-lint
     flake8
 scenario:
-  name: apache2
+  name: nocheckout

@@ -6,3 +6,4 @@
     name: "{{ rails_app_name }}"
     state: restarted
   notify: restart {{ rails_app_proxy }}
+  when: rails_app_repo_url is defined

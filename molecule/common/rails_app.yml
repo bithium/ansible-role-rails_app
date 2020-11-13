@@ -12,7 +12,7 @@ rails_app_db:
 
 rails_app_fqdn: "todo.example.com"
 
-rails_app_repo_url: "/var/cache/repos/{{ rails_app_name }}"
-rails_app_version: "v0.2.1"
+# rails_app_repo_url: "{{ lookup('env', 'RAILS_APP_URL') | default(omit)  }}"
+# rails_app_version: "{{ lookup('env', 'RAILS_APP_VERSION')  | default(omit) }}"
 
 rails_app_gems_cache_proxy: "{{ lookup('env', 'RAILS_APP_GEM_CACHE_PROXY') | default(omit) }}"

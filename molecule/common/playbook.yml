@@ -32,6 +32,7 @@
       become: true
       become_user: "{{ rails_app_user }}"
       changed_when: false
+      when: rails_app_repo_url is defined
 
     - name: Create file for testing
       copy:
@@ -45,11 +46,15 @@
     - name: Dump host variables for role
       template: src=config.yml.j2 dest={{ goss_test_variables }} mode=0644
 
-    - name: Restart services
+    - name: Restart application service
       service:
-        name: "{{ item }}"
+        name: "{{ rails_app_name }}"
         state: restarted
-      with_items:
-        - "{{ rails_app_name }}"
-        - "{{ rails_app_proxy }}"
+      changed_when: false
+      when: rails_app_repo_url is defined
+
+    - name: Restart proxy service
+      service:
+        name: "{{ rails_app_proxy }}"
+        state: restarted
       changed_when: false
