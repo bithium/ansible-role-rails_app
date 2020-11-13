@@ -21,7 +21,7 @@
     src: "{{ rails_app_config_path_db }}"
     dest: "{{ rails_app_version_path }}/config/database.yml"
     owner: "{{ rails_app_user }}"
-    group: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
     state: "link"
 
 - name: Link puma configuration
@@ -29,7 +29,7 @@
     src: "{{ rails_app_config_path_puma }}"
     dest: "{{ rails_app_version_path }}/config/puma.rb"
     owner: "{{ rails_app_user }}"
-    group: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
     state: "link"
     force: true
 
@@ -44,7 +44,7 @@
     src: "{{ rails_app_version_path }}"
     dest: "{{ rails_app_path }}"
     owner: "{{ rails_app_user }}"
-    group: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
     state: "link"
   when: rails_app_version is defined
 

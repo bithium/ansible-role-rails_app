@@ -22,6 +22,14 @@
     comment: Account used by {{ rails_app_name }} puma server
   become: true
 
+- name: Ensure deploy path exists
+  file:
+    path: "{{ rails_app_deploy_path }}"
+    state: directory
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
+    mode: 0755
+
 - import_tasks: "{{ rails_app_db_adapter }}.yml"
   become: true
 
@@ -72,7 +80,7 @@
     path: "{{ rails_app_config_path }}"
     state: directory
     owner: "{{ rails_app_user }}"
-    group: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
     mode: 0755
 
 - name: Ensure logs path exists
@@ -80,7 +88,7 @@
     path: "{{ rails_app_log_path }}"
     state: directory
     owner: "{{ rails_app_user }}"
-    group: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
     mode: 0755
 
 - name: Ensure storage path exists

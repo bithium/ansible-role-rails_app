@@ -33,17 +33,19 @@ Available variables are listed below, along with default values (see `defaults/m
 
  * Home folder for application user: `rails_app_user_home: "/var/www/{{rails_app_name}}"`
 
- * Path to install the application to: `rails_app_path: "{{ rails_app_user_home }}/current"`
+ * Path to deploy the application to: `rails_app_deploy_path: "{{ rails_app_user_home }}"`
+
+ * Path to active application version: `rails_app_path: "{{ rails_app_user_home }}/current"`
 
  * URL to git clone the application code from: `rails_app_repo_url` [Undefined]
 
- * Path to git clone application code to: `rails_app_repo_path: "{{ rails_app_user_home }}/repo"`
+ * Path to git clone application code to: `rails_app_repo_path: "{{ rails_app_deploy_path }}/repo"`
 
  * Application version to checkout as current: `rails_app_version` [Undefined]
 
- * Path to checkout version to: `rails_app_version_path: "{{ rails_app_user_home }}/{{ rails_app_version | default('current') }}"`
+ * Path to checkout version to: `rails_app_version_path: "{{ rails_app_deploy_path }}/{{ rails_app_version | default('current') }}"`
 
- * Path for shared configuration/data: `rails_app_shared_path: "{{ rails_app_user_home }}/shared"`
+ * Path for shared configuration/data: `rails_app_shared_path: "{{ rails_app_deploy_path }}/shared"`
 
  * Path for shared configuration: `rails_app_config_path: "{{ rails_app_shared_path }}/config"`
 
