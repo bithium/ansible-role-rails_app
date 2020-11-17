@@ -106,8 +106,15 @@
       changed_when: false
   when: rails_app_gems_cache_proxy is defined
 
+- name: Configure bundler for production
+  shell: >
+    bundle config path {{ rubygems_path }} && bundle config without development test
+  environment:
+    PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
+  changed_when: false
+
 - name: Install required gems
-  command: bundle install --without development test --path={{ rubygems_path }}
+  command: bundle install
   args:
     chdir: "{{ rails_app_path }}"
     creates: "{{ rails_app_path }}/Gemfile.lock"
