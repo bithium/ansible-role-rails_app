@@ -10,7 +10,7 @@ WorkingDirectory={{rails_app_path}}
 PermissionsStartOnly=true
 ExecStartPre=/bin/mkdir -p {{rails_app_socket | dirname}}
 ExecStartPre=/bin/chown -R {{rails_app_user}}:{{rails_app_user}} {{rails_app_socket | dirname}}
-ExecStart={{rubygems_path}}/bin/puma -C "{{rails_app_path}}/config/puma.rb"
+ExecStart=/bin/bash -c 'bundle exec puma -C "{{rails_app_config_path_puma}}"'
 Restart=always
 
 [Install]

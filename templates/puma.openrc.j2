@@ -1,17 +1,22 @@
 #!/sbin/openrc-run
 
-name="{{ rails_app_name }}"
-command="{{ rubygems_path }}/bin/puma"
+name=$RC_SVCNAME
+description="{{ rails_app_name | title }} Application Server"
+supervisor="supervise-daemon"
+command="/bin/bash"
+command_args="-c 'bundle exec puma -C "/var/www/todo/shared/config/puma.rb"'"
+supervise_daemon_args=" -d /var/www/todo/current"
 command_user="{{ rails_app_user }}"
-command_background="yes"
-start_stop_daemon_args="-d {{ rails_app_path }}"
-pidfile="{{ rails_app_socket | dirname }}/{{ rails_app_name }}.pid"
 
 depend() {
+  after net {{ rails_app_db_adapter }}
   before {{ rails_app_proxy }}
-  after {{ rails_app_db_adapter }}
 }
 
 start_pre() {
   checkpath --directory --owner $command_user:$command_user --mode 0775 "{{ rails_app_socket | dirname }}"
+}
+
+stop_post() {
+  rm -rf '{{ rails_app_socket | dirname }}'
 }

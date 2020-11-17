@@ -56,11 +56,37 @@
     state: touch
     mode: 0644
 
+- name: Retrieve bundler installed gems
+  shell: >
+    set -o pipefail && awk '/^\s*gem/{ print $2 }' Gemfile | tr -d -c '[:alnum:]\n-_'
+  args:
+    chdir: "{{ rails_app_path }}"
+    executable: /bin/bash
+  environment:
+    PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
+  register: rails_app_bundler_list
+  check_mode: false
+  changed_when: false
+  tags: always
+
+- name: Register installed gems
+  set_fact:
+    rails_app_gems: "{{ rails_app_bundler_list.stdout_lines }}"
+  tags: always
+
 - name: Add gem for connecting to database
   lineinfile:
     path: "{{ rails_app_path }}/Gemfile.local"
     regex: "gem {{ rails_app_db_to_gem[rails_app_db_adapter] | mandatory }}"
     line: "gem {{ rails_app_db_to_gem[rails_app_db_adapter] | mandatory }}"
+  when: rails_app_db_to_gem[rails_app_db_adapter] not in rails_app_gems
+
+- name: Add `puma` gem for serving the application
+  lineinfile:
+    path: "{{ rails_app_path }}/Gemfile.local"
+    regex: "^gem 'puma'"
+    line: "gem 'puma'{% if rails_app_puma is defined %}, '{{ rails_app_puma }}'{% endif %}"
+  when: not "puma" in rails_app_gems
 
 - name: Setup gem cache for bundler
   block:

@@ -65,16 +65,6 @@
   become: true
   become_user: "{{ rails_app_user }}"
 
-- name: Install puma gem
-  gem:
-    name: "puma"
-    version: "{{ rails_app_puma | default(omit) }}"
-    state: present
-  environment:
-    DISABLE_SSL: 1
-  become: true
-  become_user: "{{ rails_app_user }}"
-
 - name: Ensure configuration path exists
   file:
     path: "{{ rails_app_config_path }}"
