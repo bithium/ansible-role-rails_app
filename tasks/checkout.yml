@@ -48,11 +48,19 @@
     state: "link"
   when: rails_app_version is defined
 
-- name: Add support for connecting to database
-  copy:
-    dest: "{{ rails_app_path }}/Gemfile.local"
-    content: "gem {{ db_to_gem[rails_app_db_adapter] | mandatory }}"
+- name: Create Gemfile for local configurations
+  file:
+    path: "{{ rails_app_path }}/Gemfile.local"
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
+    state: touch
     mode: 0644
+
+- name: Add gem for connecting to database
+  lineinfile:
+    path: "{{ rails_app_path }}/Gemfile.local"
+    regex: "gem {{ rails_app_db_to_gem[rails_app_db_adapter] | mandatory }}"
+    line: "gem {{ rails_app_db_to_gem[rails_app_db_adapter] | mandatory }}"
 
 - name: Setup gem cache for bundler
   block:
