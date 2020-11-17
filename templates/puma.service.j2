@@ -1,7 +1,7 @@
 [Unit]
 Description={{rails_app_name | title}} Application Server
 Before={{rails_app_proxy}}.service
-After=network.target
+After=network.target {{ rails_app_db_adapter }}.service
 
 [Service]
 Type=simple
