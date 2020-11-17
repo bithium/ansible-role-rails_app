@@ -22,7 +22,7 @@
     dest: "{{ rails_app_version_path }}/config/database.yml"
     owner: "{{ rails_app_user }}"
     group: "{{ rails_app_group }}"
-    state: "link"
+    state: link
 
 - name: Link puma configuration
   file:
@@ -30,7 +30,7 @@
     dest: "{{ rails_app_version_path }}/config/puma.rb"
     owner: "{{ rails_app_user }}"
     group: "{{ rails_app_group }}"
-    state: "link"
+    state: link
     force: true
 
 - name: Link shared folders
@@ -45,7 +45,7 @@
     dest: "{{ rails_app_path }}"
     owner: "{{ rails_app_user }}"
     group: "{{ rails_app_group }}"
-    state: "link"
+    state: link
   when: rails_app_version is defined
 
 - name: Create Gemfile for local configurations
