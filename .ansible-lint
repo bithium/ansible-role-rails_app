@@ -6,3 +6,4 @@ exclude_paths:
   - molecule/default/tests/
   - molecule/apache2/tests/
   - molecule/mariadb/tests/
+  - molecule/nocheckout/tests/
