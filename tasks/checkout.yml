@@ -48,14 +48,6 @@
     state: link
   when: rails_app_version is defined
 
-- name: Create Gemfile for local configurations
-  file:
-    path: "{{ rails_app_path }}/Gemfile.local"
-    owner: "{{ rails_app_user }}"
-    group: "{{ rails_app_group }}"
-    state: touch
-    mode: 0644
-
 - name: Retrieve bundler installed gems
   shell: >
     set -o pipefail && awk '/^\s*gem/{ print $2 }' Gemfile | tr -d -c '[:alnum:]\n-_'
@@ -79,6 +71,10 @@
     path: "{{ rails_app_path }}/Gemfile.local"
     regex: "gem {{ rails_app_db_to_gem[rails_app_db_adapter] | mandatory }}"
     line: "gem {{ rails_app_db_to_gem[rails_app_db_adapter] | mandatory }}"
+    create: true
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
+    mode: 0644
   when: rails_app_db_to_gem[rails_app_db_adapter] not in rails_app_gems
 
 - name: Add `puma` gem for serving the application
@@ -86,6 +82,10 @@
     path: "{{ rails_app_path }}/Gemfile.local"
     regex: "^gem 'puma'"
     line: "gem 'puma'{% if rails_app_puma is defined %}, '{{ rails_app_puma }}'{% endif %}"
+    create: true
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_group }}"
+    mode: 0644
   when: not "puma" in rails_app_gems
 
 - name: Setup gem cache for bundler
