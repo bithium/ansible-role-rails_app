@@ -89,6 +89,19 @@
     group: "{{ rails_app_proxy_group }}"
     mode: 0755
 
+- name: Ensure `tmp` paths exists
+  file:
+    path: "{{ rails_app_shared_path }}/{{ item }}"
+    state: directory
+    owner: "{{ rails_app_user }}"
+    group: "{{ rails_app_proxy_group }}"
+    mode: 0755
+  with_items:
+    - tmp
+    - tmp/cache
+    - tmp/pids
+    - tmp/sockets
+
 - name: Create database configuration file
   copy:
     dest: "{{ rails_app_config_path_db }}"
