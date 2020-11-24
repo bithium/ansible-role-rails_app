@@ -6,16 +6,17 @@
     name: "{{ item }}"
   loop: "{{ rails_app_postgresql }}"
 
-- name: Create application databases
-  postgresql_db: name={{ rails_app_db.database }}
+- name: Create application database user
+  postgresql_user:
+    name: "{{ rails_app_db.username }}"
+    password: "{{ rails_app_db.password }}"
+    role_attr_flags: CREATEDB,NOSUPERUSER
   become: true
   become_user: postgres
 
-- name: Create application database user
-  postgresql_user:
-    db: "{{ rails_app_db.database }}"
-    name: "{{ rails_app_db.username }}"
-    password: "{{ rails_app_db.password }}"
-    priv: "ALL"
+- name: Create application databases
+  postgresql_db:
+    name: "{{ rails_app_db.database }}"
+    owner: "{{ rails_app_db.username }}"
   become: true
   become_user: postgres
