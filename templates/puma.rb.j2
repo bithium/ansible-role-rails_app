@@ -8,5 +8,7 @@ bind 'unix://{{rails_app_socket}}'
 stdout_redirect "{{rails_app_log_path}}/production.log",
                 "{{rails_app_log_path}}/production.log", true
 
+pidfile ENV.fetch('{{ rails_app_name | upper }}_PIDFILE') { 'tmp/pids/server.pid' }
+
 preload_app!
 
