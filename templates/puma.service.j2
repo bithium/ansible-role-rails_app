@@ -11,7 +11,9 @@ PermissionsStartOnly=true
 ExecStartPre=/bin/mkdir -p {{rails_app_socket | dirname}}
 ExecStartPre=/bin/chown -R {{rails_app_user}}:{{rails_app_user}} {{rails_app_socket | dirname}}
 ExecStart=/bin/bash -c 'bundle exec puma -C "{{rails_app_config_path_puma}}"'
-Restart=always
+ExecReload=/bin/kill -TSTP $MAINPID
+ExecStop=/bin/kill -TERM $MAINPID
+Restar=always
 
 [Install]
 WantedBy=multi-user.target
