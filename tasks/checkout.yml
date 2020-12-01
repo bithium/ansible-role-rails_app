@@ -38,9 +38,7 @@
   loop:
     - storage
     - log
-    - tmp/cache
-    - tmp/pids
-    - tmp/sockets
+    - tmp
 
 - name: Set active version
   file:
