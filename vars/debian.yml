@@ -7,7 +7,6 @@ rails_app_packages:
   - logrotate
   - make
   - ruby
-  - ruby-bundler
   - ruby-dev
   - tzdata
   - zlib1g-dev

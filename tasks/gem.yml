@@ -1,0 +1,10 @@
+---
+- name: Install gem '{{ item.name }}'
+  command: gem install --user {{ item.name }} --version {{ item.version }}
+  args:
+    chdir: "{{ rails_app_user_home }}"
+    creates: "{{ rubygems_path }}/gems/{{ item.name }}-{{ item.version }}"
+  environment:
+    PATH: "{{ rubygems_path }}/bin:{{ ansible_env.PATH }}"
+  become: true
+  become_user: "{{ rails_app_user }}"

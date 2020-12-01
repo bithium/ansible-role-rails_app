@@ -49,21 +49,32 @@
     rubygems_path: "{{ rubygems_path_output.stdout | trim }}"
   tags: always
 
-- name: Install rake gem
-  gem:
-    name: "rake"
-    version: "{{ rails_app_rake | default(omit) }}"
-    state: present
+- name: Add rubygems path to PATH
+  blockinfile:
+    path: "{{ rails_app_user_home }}/.profile"
+    create: true
+    block: |
+      if [ -d "{{ rubygems_path }}/bin" ] ; then
+        PATH="{{ rubygems_path }}/bin:$PATH"
+      fi
+
+- name: Configure rubygems instalation
+  copy:
+    dest: "{{ rails_app_user_home }}/.gemrc"
+    content: |
+      install: --no-document
+      update: --no-document
+    mode: 0644
   become: true
   become_user: "{{ rails_app_user }}"
 
-- name: Install bundler gem
-  gem:
-    name: "bundler"
-    version: "{{ rails_app_bundler | default(omit) }}"
-    state: present
-  become: true
-  become_user: "{{ rails_app_user }}"
+- name: Install minimum required gems
+  include_tasks: gem.yml
+  loop:
+    - name: rake
+      version: "{{ rails_app_rake | mandatory }}"
+    - name: bundler
+      version: "{{ rails_app_bundler | mandatory }}"
 
 - name: Ensure configuration path exists
   file:

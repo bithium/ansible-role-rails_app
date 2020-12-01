@@ -16,3 +16,6 @@ rails_app_fqdn: "todo.example.com"
 # rails_app_version: "{{ lookup('env', 'RAILS_APP_VERSION')  | default(omit) }}"
 
 rails_app_gems_cache_proxy: "{{ lookup('env', 'RAILS_APP_GEM_CACHE_PROXY') | default(omit) }}"
+
+rails_app_rake: 13.0.1
+rails_app_bundler: 2.1.4

@@ -1,5 +1,5 @@
 ---
-# Variables for Debian base systems.
+# Variables for Alpine base systems.
 
 rails_app_packages:
   - gcc
@@ -8,8 +8,8 @@ rails_app_packages:
   - make
   - ruby
   - ruby-bigdecimal
-  - ruby-bundler
   - ruby-dev
+  - ruby-etc
   - ruby-json
   - tzdata
   - zlib-dev
