@@ -4,13 +4,12 @@ name=$RC_SVCNAME
 description="{{ rails_app_name | title }} Application Server"
 supervisor="supervise-daemon"
 command="/bin/bash"
-command_args="-c 'bundle exec puma -C "/var/www/todo/shared/config/puma.rb"'"
+command_args="--login -c 'bundle exec puma -C "/var/www/todo/shared/config/puma.rb"'"
 supervise_daemon_args=" -d /var/www/todo/current"
 command_user="{{ rails_app_user }}"
 
 depend() {
   after net {{ rails_app_db_adapter }}
-  before {{ rails_app_proxy }}
 }
 
 start_pre() {

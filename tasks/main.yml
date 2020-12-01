@@ -136,6 +136,7 @@
     dest: "/etc/systemd/system/{{ rails_app_name }}.service"
     mode: 0644
   become: true
+  notify: reload systemd
   when: ansible_os_family == 'Debian'
 
 - name: Create puma OpenRC service file for application

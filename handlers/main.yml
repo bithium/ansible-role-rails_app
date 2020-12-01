@@ -1,6 +1,11 @@
 ---
 # handlers file for rails_app
 
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+  notify: restart {{ rails_app_name }}
+
 - name: restart {{ rails_app_name }}
   service:
     name: "{{ rails_app_name }}"

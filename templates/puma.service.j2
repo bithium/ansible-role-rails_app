@@ -1,7 +1,6 @@
 [Unit]
 Description={{rails_app_name | title}} Application Server
-Before={{rails_app_proxy}}.service
-After=network.target {{ rails_app_db_adapter }}.service
+After={{ rails_app_db_adapter }}.service
 
 [Service]
 Type=simple
@@ -10,7 +9,7 @@ WorkingDirectory={{rails_app_path}}
 PermissionsStartOnly=true
 ExecStartPre=/bin/mkdir -p {{rails_app_socket | dirname}}
 ExecStartPre=/bin/chown -R {{rails_app_user}}:{{rails_app_user}} {{rails_app_socket | dirname}}
-ExecStart=/bin/bash -c 'bundle exec puma -C "{{rails_app_config_path_puma}}"'
+ExecStart=/bin/bash --login -c 'bundle exec puma -C "{{rails_app_config_path_puma}}"'
 ExecReload=/bin/kill -TSTP $MAINPID
 ExecStop=/bin/kill -TERM $MAINPID
 Restart=always
