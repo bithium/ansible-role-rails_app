@@ -48,3 +48,5 @@ logrotate_config_path: /etc/logrotate.d/
 rails_app_logrotate_path: "{{ logrotate_config_path }}/{{ rails_app_name }}"
 rails_app_logrotate_period: weekly
 rails_app_logrotate_keep: 52
+
+rails_app_use_semantic_logger: false

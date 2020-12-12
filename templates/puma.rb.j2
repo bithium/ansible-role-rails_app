@@ -12,5 +12,12 @@ pidfile ENV.fetch('{{ rails_app_name | upper }}_PIDFILE') { 'tmp/pids/server.pid
 
 preload_app!
 
+{% if rails_app_use_semantic_logger %}
+on_worker_boot do
+  # Re-open appenders after forking the process
+  SemanticLogger.reopen
+end
+{% endif %}
+
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
